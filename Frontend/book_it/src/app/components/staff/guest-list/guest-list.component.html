@@ -1,0 +1,81 @@
+<div class="flex flex-col md:flex-row">
+    <div class="w-2/12 fixed h-screen">
+        <aside class="w-full h-full bg-orange-200 p-6">
+
+
+            <h1 class="text-3xl font-bold mb-6">Event Details</h1>
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <!-- Event Header -->
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <h2 class="text-2xl font-bold">{{ event.title }}</h2>
+                        <p class="text-sm text-gray-600">{{ event.location }} | {{ event.type }}</p>
+
+                    </div>
+                    <div class="text-lg font-semibold text-orange-500">
+                        ${{ event.ticketPrice }}
+                    </div>
+                </div>
+
+                <!-- Event Details Section -->
+                <div class="border-t border-b py-6">
+                    <h3 class="text-xl font-semibold mb-2">General</h3>
+                    <p class="text-sm text-gray-600 mb-4">
+                        <strong>Description:</strong> {{ event.description }}
+                    </p>
+                    <p class="text-sm text-gray-600 mb-4">
+                        <strong>Location:</strong> {{ event.location }}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <strong>Dates-Time:</strong> {{ event.date | date: 'dd MMM, yyyy' }} | {{ event.date | date:
+                        'shortTime' }}
+                    </p>
+                </div>
+
+            </div>
+        </aside>
+    </div>
+
+    <!-- Event Details -->
+    <main class="flex-1 ml-[16.666667%] p-6 w-10/12">
+        <div class="p-4">
+            <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600" (click)="gotoHome()">
+                ← Back
+            </button>
+        </div>
+
+        <div class="mt-4 p-4 border border-gray-300 rounded-lg bg-white transition-all duration-300">
+            <label for="searchInput" class="block text-sm font-medium text-gray-600">Search Booking Name</label>
+            <input id="searchInput" [(ngModel)]="searchQuery" (input)="searchName()" type="text" (submit)="searchName()"
+              placeholder="Enter booking name" class="w-full p-2 border border-gray-300 rounded-lg" />
+          </div>
+
+        <div *ngIf="tickets && tickets.length > 0">
+            <div *ngFor="let ticket of tickets" [ngClass]="{
+              'bg-green-200': ticket.paymentStatus=='PAID' ,
+              'bg-yellow-100': ticket.paymentStatus=='PENDING',
+              'bg-red-200': ticket.paymentStatus=='CANCELLED',
+            }" class="border-b p-4 rounded-xl pb-4 mb-4">
+                <div class="flex justify-between items-center ">
+                    <div>
+                        <h2 class="text-lg font-bold">{{ ticket.bookingName }}</h2>
+                        <p class="text-sm text-gray-600">No. of people: {{ ticket.numPpl }} </p>
+                    </div>
+                    
+
+                </div>
+                <p class="text-sm text-gray-500">
+                    Ticket price: ${{ ticket.ticketPrice }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    Seat Number: {{ ticket.seatNumber }}
+                </p>
+                <p class="text-sm text-gray-500">
+                    {{ ticket.bookingDate| date: 'fullDate' }} | {{ ticket.bookingDate | date: 'shortTime' }}
+                </p>
+                
+            </div>
+        </div>
+
+    </main>
+</div>

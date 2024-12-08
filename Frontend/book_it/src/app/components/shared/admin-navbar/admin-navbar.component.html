@@ -1,0 +1,41 @@
+<aside class="w-full h-full bg-orange-200 p-6">
+  <h2 class="font-bold text-4xl mb-6">Book It</h2>
+  <h2 class="font-bold text-xl mb-6">{{username}}</h2>
+  <ul class="space-y-4">
+    <li>
+      <button routerLink="/home"
+        [ngClass]="{'bg-black text-white': isActiveRoute('/adminHome'), 'bg-gray-100 text-black hover:bg-gray-300': !isActiveRoute('/adminHome')}"
+        class="w-full flex items-center p-3  rounded-lg" (click)="gotoHome()">
+        <span class="material-icons mr-3">event</span>
+        Events
+      </button>
+    </li>
+
+    <li>
+      <button routerLink="/bookings"
+        [ngClass]="{'bg-black text-white': isActiveRoute('/employees'), 'bg-gray-100 text-black hover:bg-gray-300': !isActiveRoute('/employees')}"
+        class="w-full flex items-center p-3 rounded-lg" (click)="gotoEmployees()">
+        <span class="material-icons mr-3">local_activity</span>
+        Employees
+      </button>
+    </li>
+
+    <li>
+      <button routerLink="/profile"
+        [ngClass]="{'bg-black text-white': isActiveRoute('/adminProfile'), 'bg-gray-100 text-black hover:bg-gray-300': !isActiveRoute('/adminProfile')}"
+        class="w-full flex items-center p-3 bg-gray-100 hover:bg-gray-300 rounded-lg" (click)="gotoProfile()">
+        <span class="material-icons mr-3">person</span>
+        Profile
+      </button>
+    </li>
+  </ul>
+
+  <br><br><br><br><br><br><br><br>
+
+  <button class="mt-10 w-full flex items-center justify-center text-red-500" (click)="logout()">
+    <span class="material-icons mr-2">logout</span>
+    Log Out
+  </button>
+  <br><br><br><br>
+
+</aside>

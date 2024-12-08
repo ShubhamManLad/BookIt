@@ -1,0 +1,47 @@
+<div class="flex flex-col md:flex-row h-screen w-full">
+  <div class="w-2/12 fixed h-screen">
+    <app-admin-navbar></app-admin-navbar>
+  </div>
+
+  <main class="flex-1 p-6 ml-[16.666667%]">
+
+    <header class="flex justify-between items-start mb-3">
+      <h1 class="text-4xl font-bold ">Employees</h1>
+
+      <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+      (click)="toggleSearch()">
+      {{ searchMode ? 'Close Search' : 'Search Employee' }}
+      </button>
+      
+    </header>
+
+    <div class="flex-1 overflow-y-auto bg-white rounded-lg shadow-lg p-4 ">
+
+      <div *ngIf="searchMode" class="mb-4 p-4 border border-gray-300 rounded-lg bg-white transition-all duration-300">
+        <label for="searchInput" class="block text-sm font-medium text-gray-600">Search Employee</label>
+        <input id="searchInput" [(ngModel)]="searchQuery" (input)="searchEvents()" type="text"
+          placeholder="Enter employee name" class="w-full p-2 border border-gray-300 rounded-lg" />
+      </div>
+
+      <div *ngIf="employees && employees.length > 0">
+        <div *ngFor="let employee of employees" class="border-b pb-4 mb-4 ">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-lg font-bold">{{ employee.name }}</h2>
+              <p class="text-sm text-gray-600">{{ employee.email }} | {{ employee.username }}</p>
+            </div>
+            <button class="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700" (click)="removeEmployee(employee.username)">
+              Remove
+            </button>
+
+
+          </div>
+
+        </div>
+      </div>
+      <div *ngIf="!employees || employees.length === 0" class="text-center text-gray-500">
+        No employees available.
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,77 @@
+<div *ngIf="tickets.length > 0" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  <div *ngFor="let ticket of tickets" class="p-4 border rounded-lg shadow-md bg-white hover:shadow-lg transition">
+    <h2 class="text-lg font-bold">{{ ticket.eventName }}</h2>
+    <h2 class="text-md font-semibold">{{ ticket.bookingName }}</h2>
+    <p class="text-sm text-gray-600">Seat: {{ ticket.seatNumber }}</p>
+    <p class="text-sm text-gray-600">
+      Booking Date: {{ ticket.bookingDate | date: 'fullDate' }}
+    </p>
+    <p class="text-sm text-gray-600">
+      No. of people: {{ ticket.numPpl}}
+    </p>
+    <p class="text-sm text-gray-600">
+      Total Amount: {{ ticket.ticketPrice}}
+    </p>
+    <p class="text-sm text-gray-600">
+      Status:
+      <span [ngClass]="{
+            'text-green-500': ticket.paymentStatus === 'PAID',
+            'text-yellow-400': ticket.paymentStatus === 'PENDING',
+            'text-red-500': ticket.paymentStatus === 'CANCELLED',
+          }">
+        {{ ticket.paymentStatus }}
+      </span>
+    </p>
+    <button *ngIf="ticket.paymentStatus === 'PENDING'" class="mt-4 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700" (click)="payTicket(ticket.ticketId)">
+      {{ paymentLoading ? 'Processing...' : 'Pay' }}
+    </button>
+    <button *ngIf="ticket.paymentStatus == 'PAID' || ticket.paymentStatus=='PENDING'"
+      class="mt-4 ml-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+      (click)="cancelTicket(ticket.ticketId)">
+      
+      {{ cancelationLoading ? 'Cancelling...' : 'Pay' }}
+    </button>
+
+    <button class="mt-4 ml-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+      (click)="selectTicket(ticket.ticketId, ticket.eventName)">
+      Feedback
+    </button>
+  </div>
+</div>
+
+<div *ngIf="tickets.length === 0" class="text-center text-gray-500">
+  No tickets found.
+</div>
+
+<div *ngIf="isModalOpen" (click)="closeModal()"
+  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96" (click)="$event.stopPropagation()">
+    <h2 class="text-2xl font-bold mb-4">Rate your experience</h2>
+
+    <label for="name" class="block text-sm text-gray-600">{{selectedEventName}}</label>
+    <div class="flex justify-center mb-4">
+      <ng-container *ngFor="let star of stars; let i = index">
+        <button (click)="setRating(i + 1)" class="focus:outline-none">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" [ngClass]="{ 'text-yellow-500': i < feedback.rating }"
+            fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 .587l3.668 7.436 8.217 1.193-5.942 5.796 1.4 8.162L12 18.897l-7.343 3.847 1.4-8.162L.115 9.216l8.217-1.193z" />
+          </svg>
+        </button>
+      </ng-container>
+    </div>
+    <input id="name" [(ngModel)]="feedback.feedbackMsg" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+      placeholder="Feedback">
+
+
+    <div class="flex justify-end">
+      <button class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600" (click)="sendFeedback()">
+        Submit
+      </button>
+    </div>
+
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+      <span class="material-icons">close</span>
+    </button>
+  </div>
+</div>

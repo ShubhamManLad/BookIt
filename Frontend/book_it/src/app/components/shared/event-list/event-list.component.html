@@ -1,0 +1,89 @@
+<div class="flex-1 overflow-y-auto bg-white rounded-lg shadow-lg p-4">
+  <div class="flex-row items-center bg-beige rounded-3xl mb-4 p-4 space-x-4">
+    <div class="flex-1 flex-row items-center bg-beige rounded-3xl mb-2 p-2 space-x-4">
+      <button *ngFor="let tab of tabs" [ngClass]="{
+        'bg-black text-white': selectedTab === tab,
+        'bg-white text-black': selectedTab !== tab
+      }" class="px-4 py-2 rounded-full border border-black hover:text-white hover:bg-black"
+        (click)="filterEvents(tab)">
+        {{ tab }}
+      </button>
+
+      <button class="px-4 py-2 bg-gray-200 rounded-full border border-black" (click)="toggleLocationDropdown()">
+        Locations ▼
+      </button>
+
+
+      <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 justify-end" (click)="toggleSearch()">
+        {{ searchMode ? 'Close Search' : 'Search Event' }}
+      </button>
+
+
+
+    </div>
+
+    <div *ngIf="showLocationDropdown"
+      class="flex-1 mt-2 ">
+      
+      <button *ngFor="let location of locations" (click)="selectLocation(location)"
+      [ngClass]="{
+        'bg-black text-white': location === selectedLocation,
+        'bg-white text-black': location !== selectedLocation
+      }" class="px-4 py-2 mx-2 shadow-lg rounded-full border border-black hover:text-white hover:bg-black"
+        >
+        {{ location }}
+      </button>
+    </div>
+
+    <!-- Expandable Search Div -->
+    <div *ngIf="searchMode" class="mt-4 p-4 border border-black rounded-lg bg-white transition-all duration-300">
+      <label for="searchInput" class="block text-sm font-medium text-gray-600">Search Events</label>
+      <input id="searchInput" [(ngModel)]="searchQuery" (input)="searchEvents()" type="text"
+        placeholder="Enter event name" class="w-full p-2 border border-gray-300 rounded-lg" />
+    </div>
+  </div>
+  <div *ngIf="events && events.length > 0">
+    <div *ngFor="let event of events" [ngClass]="{
+      'bg-green-200': event.availableSeats/event.totalSeats >= 0.5 ,
+      'bg-yellow-100': event.availableSeats/event.totalSeats < 0.5 ,
+      'bg-red-200': event.availableSeats <=5,
+    }" class="border-b p-4 rounded-xl pb-4 mb-4">
+      <div class="flex justify-between items-center ">
+        <div>
+          <h2 class="text-lg font-bold">{{ event.title }}</h2>
+          <p class="text-sm text-gray-600">{{ event.location }} | {{ event.type }}</p>
+        </div>
+        <div *ngIf="role=='USER'">
+          <button class="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+            (click)="gotoEvent(event.eventId)">
+            Book
+          </button>
+        </div>
+
+        <div *ngIf="role==='ADMIN'">
+          <button class="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+            (click)="gotoEventEdit(event.eventId)">
+            View
+          </button>
+        </div>
+
+        <div *ngIf="role==='STAFF'">
+          <button class="bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
+            (click)="gotoEventTickets(event.eventId)">
+            View Bookings
+          </button>
+        </div>
+
+      </div>
+      <p class="text-sm text-gray-500">
+        {{ event.date | date: 'fullDate' }} | {{ event.date | date: 'shortTime' }}
+      </p>
+      <p class="text-sm text-gray-500">
+        {{ event.availableSeats }} / {{ event.totalSeats }} seats available
+      </p>
+    </div>
+  </div>
+  <div *ngIf="!events || events.length === 0" class="text-center text-gray-500">
+    No events available.
+  </div>
+</div>

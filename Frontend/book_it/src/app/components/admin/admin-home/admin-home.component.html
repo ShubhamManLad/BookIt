@@ -1,0 +1,70 @@
+<div class="flex flex-col md:flex-row h-screen w-full">
+    <div class="w-2/12 fixed h-screen">
+        <app-admin-navbar></app-admin-navbar>
+    </div>
+
+    <main class="flex-1 p-6 ml-[16.666667%]">
+        <header class="flex justify-between items-start mb-6">
+            <h1 class="text-4xl font-bold ">My Events</h1>
+
+            <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                (click)="openEventModal()">
+                Add Event
+            </button>
+        </header>
+
+        <app-event-list class="h-9/12"></app-event-list>
+    </main>
+</div>
+
+<div *ngIf="isModalOpen" (click)="closeModal()"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96" (click)="$event.stopPropagation()">
+        <h2 class="text-2xl font-bold mb-4">Enter Event Details</h2>
+
+        <label for="name" class="block text-sm text-gray-600">Event Title</label>
+        <input id="name" [(ngModel)]="event.title" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Enter title">
+
+        <label for="name" class="block text-sm text-gray-600">Event Description</label>
+        <input id="name" [(ngModel)]="event.description" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Enter description">
+
+        <label for="numPpl" class="block text-sm text-gray-600">Total Available Seats</label>
+        <input id="numPpl" type="number" [(ngModel)]="event.totalSeats"
+            class="w-full p-2 border border-gray-300 rounded-lg mb-4" placeholder="Enter number of People">
+
+        <label for="eventType" class="block text-sm text-gray-600">Select Event Type</label>
+        <select id="eventType" [(ngModel)]="event.type" class="w-full p-2 border border-gray-300 rounded-lg mb-4">
+            <option *ngFor="let t of eventTypes" [value]="t">{{ t }}</option>
+        </select>
+
+        <label for="datePicker" class="block text-sm text-gray-600">Select Date</label>
+        <input id="datePicker" type="date" [(ngModel)]="date" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Choose a date" />
+
+
+        <label for="timePicker" class="block text-sm text-gray-600">Select Time</label>
+        <input id="timePicker" type="time" [(ngModel)]="time" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Choose a time" />
+
+        <label for="location" class="block text-sm text-gray-600">Location</label>
+        <input id="location" type="text" [(ngModel)]="event.location" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Enter location">
+
+        <label for="ticketPrice" class="block text-sm text-gray-600">Ticket Price</label>
+        <input id="ticketPrice" type="number" [(ngModel)]="event.ticketPrice"
+            class="w-full p-2 border border-gray-300 rounded-lg mb-4" placeholder="Enter ticket price">
+
+
+        <div class="flex justify-end">
+            <button class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600" (click)="addEvent()">
+                Add Event
+            </button>
+        </div>
+
+        <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+            <span class="material-icons">close</span>
+        </button>
+    </div>
+</div>

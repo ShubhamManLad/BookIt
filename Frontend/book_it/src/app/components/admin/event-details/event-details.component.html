@@ -1,0 +1,158 @@
+<div class="flex flex-col md:flex-row">
+    <div class="md:w-1/12 p-4">
+        <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600" (click)="gotoHome()">
+            ← Back
+        </button>
+    </div>
+
+    <!-- Event Details -->
+    <main class="flex-1 p-6">
+        <h1 class="text-3xl font-bold mb-6">Event Details</h1>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg">
+            <!-- Event Header -->
+            <div class="flex justify-between items-start mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold">{{ event.title }}</h2>
+                    <p class="text-sm text-gray-600">{{ event.location }} | {{ event.type }}</p>
+
+                </div>
+                <div class="text-lg font-semibold text-orange-500">
+                    ${{ event.ticketPrice }}<br>
+
+                    <div *ngIf="feedbacks>0" class="flex">
+                        {{avgRating}}
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-1 ml-1 text-yellow-500"
+                            fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M12 .587l3.668 7.436 8.217 1.193-5.942 5.796 1.4 8.162L12 18.897l-7.343 3.847 1.4-8.162L.115 9.216l8.217-1.193z" />
+                        </svg>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="flex flex-row">
+
+                <div class="border-t border-b py-6 mr-12">
+                    <h3 class="text-xl font-semibold mb-2">General</h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <strong>Description:</strong> {{ event.description }}
+                    </p>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <strong>Location:</strong> {{ event.location }}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <strong>Dates-Time:</strong> {{ event.date | date: 'dd MMM, yyyy' }} | {{ event.date | date:
+                        'shortTime' }}
+                    </p>
+                </div>
+
+                <div class="border-t border-b py-6">
+                    <h3 class="text-xl font-semibold mb-2">Booking Details</h3>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <strong>Seats Available: </strong> {{ event.availableSeats }} / {{ event.totalSeats}}
+                    </p>
+                    <p class="text-sm text-gray-600 mb-2">
+                        <strong>Ticket Price: $</strong> {{ event.ticketPrice }}
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        <strong>Type: </strong>{{ event.type }}
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="border-t border-b">
+                <div>
+                    <h1 class="text-xl font-semibold mb-6">Seat Selection</h1>
+                    <h3 class="text-center">Stage this way</h3><br>
+                    <div class="grid grid-cols-10 gap-2">
+                        <ng-container *ngFor="let row of seats">
+                            <ng-container *ngFor="let seat of row">
+                                <div class="p-3 border rounded text-center font-medium cursor-pointer transition"
+                                    [ngClass]="{
+                                'bg-red-500 text-white': bookedSeats.includes(seat),
+                                'bg-green-500 text-white': selectedSeats.includes(seat),
+                                'hover:bg-blue-200': !bookedSeats.includes(seat)
+                              }">
+                                    {{ seat }}
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold my-2">Bookings</h3>
+
+                <div *ngIf="tickets && tickets.length > 0">
+                    <div *ngFor="let ticket of tickets" [ngClass]="{
+                      'bg-green-200': ticket.paymentStatus=='PAID' ,
+                      'bg-yellow-100': ticket.paymentStatus=='PENDING',
+                      'bg-red-200': ticket.paymentStatus=='CANCELLED',
+                    }" class="border-b p-4 rounded-xl pb-4 mb-4">
+                        <div class="flex justify-between items-center ">
+                            <div>
+                                <h2 class="text-lg font-bold">{{ ticket.bookingName }}</h2>
+                                <p class="text-sm text-gray-600">No. of people: {{ ticket.numPpl }} </p>
+                            </div>
+
+
+                        </div>
+                        <p class="text-sm text-gray-500">
+                            Ticket price: ${{ ticket.ticketPrice }}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Seat Number: {{ ticket.seatNumber }}
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            {{ ticket.bookingDate| date: 'fullDate' }} | {{ ticket.bookingDate | date: 'shortTime' }}
+                        </p>
+                        <p *ngIf="ticket.feedbackMsg!='' && ticket.rating
+                        !=0" class="text-sm text-gray-500">
+                            Feedback: {{ ticket.feedbackMsg }} | {{ ticket.rating}} stars
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="mt-6 w-full flex justify-end">
+                    <button class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600"
+                        (click)="openEditModal()">
+                        Edit Event Details
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<div *ngIf="isModalOpen" (click)="closeModal()"
+    class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96" (click)="$event.stopPropagation()">
+        <h2 class="text-2xl font-bold mb-4">Enter Booking Details</h2>
+
+        <label for="name" class="block text-sm text-gray-600">Booking Name</label>
+        <input id="name" [(ngModel)]="bookingName" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Enter name">
+
+        <label for="numPpl" class="block text-sm text-gray-600">No. of People</label>
+        <input id="numPpl" type="number" [(ngModel)]="numPpl" class="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            placeholder="Enter number of People">
+
+        <label for="seat" class="block text-sm text-gray-600">Selected Seats</label>
+        <input id="numPpl" type="text" [(ngModel)]="selectedSeat"
+            class="w-full p-2 border border-gray-300 rounded-lg mb-4" placeholder="Selected Seats:">
+
+        <div class="flex justify-end">
+            <button class="bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600" (click)="editEvent()">
+                Edit Event
+            </button>
+        </div>
+
+        <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-600 hover:text-gray-900">
+            <span class="material-icons">close</span>
+        </button>
+    </div>
+</div>

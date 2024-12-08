@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost;databaseName=BookIt;integratedSecurity=true;encrypt=true;trustServerCertificate=true;
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: shubhi050@gmail.com
+    password: exao qrah opne vodn
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format-sql: true
+        dialect: org.hibernate.dialect.SQLServerDialect
+server:
+  port: 8090
+

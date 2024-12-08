@@ -1,0 +1,47 @@
+<div class="flex flex-col md:flex-row h-screen w-full">
+  <div class="w-2/12 fixed h-screen">
+    <app-navbar></app-navbar>
+
+  </div>
+
+  <main class=" flex-1 ml-[16.666667%] p-6 w-10/12">
+    <h1 class="text-4xl font-bold mb-8">Profile</h1>
+    <div class="space-y-6 w-4/12">
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Name</label>
+        <input id="numPpl" type="text" [(ngModel)]="name" class="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder={{name}}>
+      </div>
+
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Username</label>
+        <input id="numPpl" type="text" [(ngModel)]="username" class="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder={{username}}>
+      </div>
+
+      
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Email Id</label>
+        <input id="numPpl" type="email" [(ngModel)]="email" class="w-full p-2 border border-gray-300 rounded-lg"
+          placeholder={{email}}>
+      </div>
+
+      
+
+    </div>
+    <!-- Forgot Password -->
+    <button class="mt-6 mr-4 bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800">
+      Forgot Password
+    </button>
+
+    <!-- Save Changes Button -->
+    <button class="mt-6 bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800">
+      Save Changes
+    </button>
+  </main>
+
+
+
+</div>
